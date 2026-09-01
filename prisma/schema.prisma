@@ -11,3 +11,85 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum Role {
+  RECEPCIONISTA
+  MEDICO
+  GERENCIA
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  password String
+  role         Role
+  
+  // puedes agregar mas campos para adaptar a tu modelo, como nombre, apellido, etc.
+  @@map("users")
+}
+
+model Paciente {
+  id              Int       @id @default(autoincrement())
+  nombre          String
+  ap_paterno       String
+  ap_materno       String?
+  email           String?   @unique
+  telefono        String?
+  fecha_nacimiento DateTime? @db.Date
+
+  citas           Cita[]
+
+  @@map("pacientes")
+}
+
+model HistorialClinico {
+  id          Int      @id @default(autoincrement())
+  peso        Decimal
+  altura      Decimal
+  diagnostico String
+  tratamiento String
+  id_cita      Int      @unique
+
+  cita        Cita     @relation(fields: [id_cita], references: [id])
+
+  @@map("historial_clinico")
+}
+
+model Especialidad {
+  id      Int      @id @default(autoincrement())
+  nombre  String
+
+  medicos Medico[]
+
+  @@map("especialidades")
+}
+
+model Medico {
+  id             Int          @id @default(autoincrement())
+  nombre         String
+  ap_paterno      String
+  ap_materno      String?
+  email          String?      @unique
+  telefono       String?
+  especialidad_id Int
+
+  especialidad   Especialidad @relation(fields: [especialidad_id], references: [id])
+  citas          Cita[]
+
+  @@map("medicos")
+}
+
+model Cita {
+  id           Int               @id @default(autoincrement())
+  fecha        DateTime          @db.Date
+  hora         DateTime          @db.Time
+  estado       String
+  id_paciente   Int
+  id_medico     Int
+
+  paciente     Paciente          @relation(fields: [id_paciente], references: [id])
+  medico       Medico            @relation(fields: [id_medico], references: [id])
+  historial    HistorialClinico?
+
+  @@map("citas")
+}
