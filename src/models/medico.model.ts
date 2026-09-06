@@ -1,18 +1,27 @@
 import prisma from "../config/prisma";
 
 export const medicoModel = {
-  findAll: async () => {
-    return await prisma.medico.findMany({
-      select: {
-        nombre: true,
-        ap_paterno: true,
-        telefono: true,
-        especialidad: {
-          select: {
-            nombre: true,
-          },
-        },
+  getAllDoctors(specialtyName?: string) {
+    return prisma.medico.findMany({
+      where: specialtyName
+        ? {
+            especialidad: {
+              nombre: {
+                equals: specialtyName,
+                mode: "insensitive",
+              },
+            },
+          }
+        : {},
+      include: {
+        especialidad: true,
       },
+    });
+  },
+
+  findById: async (id: number) => {
+    return await prisma.medico.findUnique({
+      where: { id },
     });
   },
 
