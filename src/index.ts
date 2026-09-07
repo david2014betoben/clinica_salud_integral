@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use("/api/especialidades", especialidadRouter);
+//app.use("/api/especialidades", especialidadRouter);
 app.use("/api/medicos", medicoRouter);
 app.use("/api/pacientes", pacienteRouter);
 app.use("/api/auth", authRouter);

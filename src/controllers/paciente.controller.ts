@@ -30,11 +30,11 @@ export const getPacienteById = async (
   res: Response,
 ): Promise<void> => {
   /*
-  #swagger.tags = ['Pacientes']
+  #swagger.tags = ['RECEPCIONISTAS']
 
   #swagger.summary = 'Obtener un paciente por ID'
 
-  #swagger.description = 'Obtiene la información de un paciente específico mediante su ID, incluyendo sus datos personales.'
+  #swagger.description = 'Obtiene la información de un paciente específico mediante su ID, incluyendo sus datos personales e historial.'
 
   #swagger.parameters['id'] = {
     in: 'path',
@@ -67,7 +67,7 @@ export const postPaciente = async (
   res: Response,
 ): Promise<void> => {
   /*
-  #swagger.tags = ['Pacientes']
+  #swagger.tags = ['RECEPCIONISTAS']
 
   #swagger.summary = 'Crear un nuevo paciente'
 

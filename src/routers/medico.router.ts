@@ -11,34 +11,10 @@ import { authorize } from "../middlewares/authorize.middleware";
 const router: Router = Router();
 
 router.get(
-  "/",
+  "/ESPECIALIDADES",
   verifyToken,
   authorize("RECEPCIONISTA", "GERENCIA"),
   getMedicos /* #swagger.security = [{
-            "bearerAuth": []
-    }] */,
-);
-router.post(
-  "/",
-  verifyToken,
-  authorize("GERENCIA"),
-  postMedico /* #swagger.security = [{
-            "bearerAuth": []
-    }] */,
-);
-router.put(
-  "/:id",
-  verifyToken,
-  authorize("GERENCIA"),
-  putMedico /* #swagger.security = [{
-            "bearerAuth": []
-    }] */,
-);
-router.delete(
-  "/:id",
-  verifyToken,
-  authorize("GERENCIA"),
-  deleteMedico /* #swagger.security = [{
             "bearerAuth": []
     }] */,
 );
