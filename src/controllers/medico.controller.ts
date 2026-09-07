@@ -6,10 +6,17 @@ export const getMedicos = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const productos = await medicoModel.findAll();
-    res.json({ data: productos });
-  } catch (error: any) {
-    res.status(500).json({ message: error });
+    const specialtyName = req.query.specialtyName as string | undefined;
+
+    const doctors = await medicoModel.getAllDoctors(specialtyName);
+
+    res.status(200).json(doctors);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error al obtener los médicos",
+    });
   }
 };
 
