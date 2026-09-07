@@ -13,10 +13,17 @@ import { authorize } from "../middlewares/authorize.middleware";
 
 const router: Router = Router();
 
-router.get("/", getPacientes);
-router.get("/:id", getPacienteById);
+//router.get("/", getPacientes);
+router.get(
+  "/:id",
+  verifyToken,
+  authorize("RECEPCIONISTA"),
+  getPacienteById /* #swagger.security = [{
+            "bearerAuth": []
+    }] */,
+);
 router.post(
-  "/",
+  "/CREAR",
   verifyToken,
   authorize("RECEPCIONISTA"),
   validate(pacienteSchema),
@@ -24,7 +31,7 @@ router.post(
             "bearerAuth": []
     }] */,
 );
-router.put("/:id", validate(pacienteSchema), putPaciente);
-router.delete("/:id", deletePaciente);
+//router.put("/:id", validate(pacienteSchema), putPaciente);
+//router.delete("/:id", deletePaciente);
 
 export default router;

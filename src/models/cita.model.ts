@@ -110,4 +110,29 @@ export const citaModel = {
       data: { estado },
     });
   },
+
+  getAppointmentsBySpecialty() {
+    return prisma.$queryRaw`
+    SELECT s.nombre AS especialidades, COUNT(a.id)::int AS total_citas
+    FROM citas a
+    INNER JOIN medicos d ON d.id = a.id_medico
+    INNER JOIN especialidades s ON s.id = d.especialidad_id
+    GROUP BY s.nombre
+    ORDER BY total_citas DESC
+  `;
+  },
+
+  getDailyCutoff(date: string) {
+    const startOfDay = new Date(`${date}T00:00:00`);
+    const endOfDay = new Date(`${date}T23:59:59`);
+
+    return prisma.cita.groupBy({
+      by: ["estado"],
+      where: {
+        fecha: { gte: startOfDay, lte: endOfDay },
+        estado: { in: ["COMPLETADA", "CANCELADA"] },
+      },
+      _count: { estado: true },
+    });
+  },
 };

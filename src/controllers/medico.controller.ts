@@ -6,7 +6,7 @@ export const getMedicos = async (
   res: Response,
 ): Promise<void> => {
   /*
-  #swagger.tags = ['Médicos']
+  #swagger.tags = ['RECEPCIONISTAS']
 
   #swagger.summary = 'Obtener todos los médicos'
 
