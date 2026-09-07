@@ -13,7 +13,7 @@ const router: Router = Router();
 router.get(
   "/ESPECIALIDADES",
   verifyToken,
-  authorize("RECEPCIONISTA", "GERENCIA"),
+  authorize("RECEPCIONISTA"),
   getMedicos /* #swagger.security = [{
             "bearerAuth": []
     }] */,
