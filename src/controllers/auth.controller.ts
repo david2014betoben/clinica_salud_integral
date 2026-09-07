@@ -20,6 +20,17 @@ export async function register(req: Request, res: Response) {
 }
 
 export async function login(req: Request, res: Response) {
+  /* #swagger.requestBody = {
+  required: true,
+  content: {
+    "application/json": {
+      example: {
+        email: "ethan@gmail.com",
+        password: "123456"
+      }
+    }
+  }
+}*/
   try {
     const { email, password } = req.body;
     const user = await prisma.user.findUnique({ where: { email } });

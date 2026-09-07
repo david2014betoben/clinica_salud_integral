@@ -5,7 +5,14 @@ import { authorize } from "../middlewares/authorize.middleware";
 
 const router: Router = Router();
 
-router.post("/register", verifyToken, authorize("GERENCIA"), register);
+router.post(
+  "/register",
+  verifyToken,
+  authorize("GERENCIA"),
+  register /* #swagger.security = [{
+            "bearerAuth": []
+    }] */,
+);
 router.post("/login", login);
 
 export default router;

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import especialidadRouter from "./routers/especialidad.router";
 import medicoRouter from "./routers/medico.router";
 import pacienteRouter from "./routers/paciente.router";
+import citaRouter from "./routers/cita.router";
 import authRouter from "./routers/auth.routes";
 import path from "node:path";
 import swaggerUi from "swagger-ui-express";
@@ -16,10 +17,11 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use("/api/specialties", especialidadRouter);
+app.use("/api/especialidades", especialidadRouter);
 app.use("/api/medicos", medicoRouter);
-app.use("/api/patients", pacienteRouter);
+app.use("/api/pacientes", pacienteRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/citas", citaRouter);
 
 const swaggerFilePath = path.resolve("./src/swagger-output.json");
 

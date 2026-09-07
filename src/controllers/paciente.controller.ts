@@ -5,6 +5,13 @@ export const getPacientes = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  /*
+  #swagger.tags = ['Pacientes']
+
+  #swagger.summary = 'Obtener todos los pacientes'
+
+  #swagger.description = 'Obtiene la lista de todos los pacientes registrados en la clínica, con la posibilidad de buscar por nombre o apellido.'
+*/
   try {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
@@ -22,6 +29,21 @@ export const getPacienteById = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  /*
+  #swagger.tags = ['Pacientes']
+
+  #swagger.summary = 'Obtener un paciente por ID'
+
+  #swagger.description = 'Obtiene la información de un paciente específico mediante su ID, incluyendo sus datos personales.'
+
+  #swagger.parameters['id'] = {
+    in: 'path',
+    required: true,
+    type: 'integer',
+    description: 'ID del paciente',
+    example: 1
+  }
+*/
   try {
     const id = Number(req.params.id);
     if (isNaN(id)) {
@@ -44,6 +66,53 @@ export const postPaciente = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  /*
+  #swagger.tags = ['Pacientes']
+
+  #swagger.summary = 'Crear un nuevo paciente'
+
+  #swagger.description = 'Registra un nuevo paciente en la clínica.'
+
+  #swagger.requestBody = {
+    required: true,
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          required: ["nombre", "ap_paterno","fecha_nacimiento"],
+          properties: {
+            nombre: {
+              type: "string",
+              example: "Carlos"
+            },
+            ap_paterno: {
+              type: "string",
+              example: "Mamani"
+            },
+            ap_materno: {
+              type: "string",
+              example: "Quispe"
+            },
+            email: {
+              type: "string",
+              format: "email",
+              example: "carlos.mamani@gmail.com"
+            },
+            telefono: {
+              type: "string",
+              example: "70012345"
+            },
+            fecha_nacimiento: {
+              type: "string",
+              format: "date",
+              example: "1990-05-12"
+            }
+          }
+        }
+      }
+    }
+  }
+*/
   try {
     const {
       nombre,
@@ -84,6 +153,60 @@ export const putPaciente = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  /*
+  #swagger.tags = ['Pacientes']
+
+  #swagger.summary = 'Actualizar un paciente'
+
+  #swagger.description = 'Actualiza los datos personales de un paciente existente.'
+
+  #swagger.parameters['id'] = {
+    in: 'path',
+    required: true,
+    type: 'integer',
+    description: 'ID del paciente',
+    example: 1
+  }
+
+  #swagger.requestBody = {
+    required: true,
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            nombre: {
+              type: "string",
+              example: "Carlos"
+            },
+            ap_paterno: {
+              type: "string",
+              example: "Mamani"
+            },
+            ap_materno: {
+              type: "string",
+              example: "Quispe"
+            },
+            email: {
+              type: "string",
+              format: "email",
+              example: "carlos.mamani@gmail.com"
+            },
+            telefono: {
+              type: "string",
+              example: "70012345"
+            },
+            fecha_nacimiento: {
+              type: "string",
+              format: "date",
+              example: "1990-05-12"
+            }
+          }
+        }
+      }
+    }
+  }
+*/
   try {
     const id = Number(req.params.id);
 
@@ -128,6 +251,21 @@ export const deletePaciente = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  /*
+  #swagger.tags = ['Pacientes']
+
+  #swagger.summary = 'Eliminar un paciente'
+
+  #swagger.description = 'Elimina un paciente registrado en la clínica mediante su ID.'
+
+  #swagger.parameters['id'] = {
+    in: 'path',
+    required: true,
+    type: 'integer',
+    description: 'ID del paciente',
+    example: 1
+  }
+*/
   try {
     const id = Number(req.params.id);
 
