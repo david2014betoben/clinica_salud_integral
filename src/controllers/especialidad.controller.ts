@@ -5,6 +5,13 @@ export const getEspecialidades = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  /*
+  #swagger.tags = ['Especialidades']
+
+  #swagger.summary = 'Obtener todas las especialidades'
+
+  #swagger.description = 'Obtiene la lista de todas las especialidades médicas registradas en la clínica.'
+*/
   try {
     const productos = await especialidadModel.findAll();
     res.json({ data: productos });

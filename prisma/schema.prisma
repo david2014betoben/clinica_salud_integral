@@ -83,8 +83,8 @@ model Cita {
   id           Int               @id @default(autoincrement())
   fecha        DateTime          @db.Date
   hora         DateTime          @db.Time
-  estado       String
-  id_paciente   Int
+  estado       String?           @default("programada")
+  id_paciente   Int 
   id_medico     Int
 
   paciente     Paciente          @relation(fields: [id_paciente], references: [id])

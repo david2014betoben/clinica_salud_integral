@@ -5,6 +5,13 @@ export const getMedicos = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  /*
+  #swagger.tags = ['Médicos']
+
+  #swagger.summary = 'Obtener todos los médicos'
+
+  #swagger.description = 'Obtiene la lista de todos los médicos registrados en la clínica, incluyendo la información de su especialidad, puede filtrar por especialidad.'
+*/
   try {
     const specialtyName = req.query.specialtyName as string | undefined;
 
@@ -24,6 +31,52 @@ export const postMedico = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  /*
+  #swagger.tags = ['Médicos']
+
+  #swagger.summary = 'Crear un nuevo médico'
+
+  #swagger.description = 'Registra un nuevo médico en la clínica y lo asocia con una especialidad.'
+
+    #swagger.requestBody = {
+    required: true,
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          required: ["nombre", "ap_paterno", "especialidad_id"],
+          properties: {
+            nombre: {
+              type: "string",
+              example: "Carlos"
+            },
+            ap_paterno: {
+              type: "string",
+              example: "Mendoza"
+            },
+            ap_materno: {
+              type: "string",
+              example: "Rojas"
+            },
+            email: {
+              type: "string",
+              format: "email",
+              example: "carlos.mendoza@clinica.com"
+            },
+            telefono: {
+              type: "string",
+              example: "71012345"
+            },
+            especialidad_id: {
+              type: "integer",
+              example: 1
+            }
+          }
+        }
+      }
+    }
+  }
+*/
   try {
     const { nombre, ap_paterno, ap_materno, telefono, email, especialidad_id } =
       req.body;
@@ -55,6 +108,58 @@ export const postMedico = async (
 };
 
 export const putMedico = async (req: Request, res: Response): Promise<void> => {
+  /*
+  #swagger.tags = ['Médicos']
+
+  #swagger.summary = 'Actualizar un médico'
+
+  #swagger.description = 'Actualiza los datos de un médico existente, incluyendo su información personal y especialidad.'
+
+  #swagger.parameters['id'] = {
+    in: 'path',
+    required: true,
+    type: 'integer',
+    description: 'ID del médico'
+  }
+
+  #swagger.requestBody = {
+    required: true,
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            nombre: {
+              type: "string",
+              example: "Carlos"
+            },
+            ap_paterno: {
+              type: "string",
+              example: "Mendoza"
+            },
+            ap_materno: {
+              type: "string",
+              example: "Rojas"
+            },
+            email: {
+              type: "string",
+              format: "email",
+              example: "carlos.mendoza@clinica.com"
+            },
+            telefono: {
+              type: "string",
+              example: "71012345"
+            },
+            especialidad_id: {
+              type: "integer",
+              example: 1
+            }
+          }
+        }
+      }
+    }
+  }
+*/
   try {
     const id = Number(req.params.id);
 
@@ -93,6 +198,20 @@ export const deleteMedico = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  /*
+  #swagger.tags = ['Médicos']
+
+  #swagger.summary = 'Eliminar un médico'
+
+  #swagger.description = 'Elimina un médico registrado en la clínica mediante su ID.'
+
+   #swagger.parameters['id'] = {
+    in: 'path',
+    required: true,
+    type: 'integer',
+    description: 'ID del médico'
+  }
+*/
   try {
     const id = Number(req.params.id);
 
