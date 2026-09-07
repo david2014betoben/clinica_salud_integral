@@ -1,16 +1,11 @@
 import { Router } from "express";
-import { getMedicos } from "../controllers/medico.controller";
+import { register, login } from "../controllers/auth.controller.js";
 import { verifyToken } from "../middlewares/auth.middleware";
 import { authorize } from "../middlewares/authorize.middleware";
 
 const router: Router = Router();
 
-router.get(
-  "/",
-  verifyToken,
-  authorize("RECEPCIONISTA"),
-  getMedicos /* #swagger.security = [{
-            "bearerAuth": []
-    }] */,
-);
+router.post("/register", verifyToken, authorize("GERENCIA"), register);
+router.post("/login", login);
+
 export default router;

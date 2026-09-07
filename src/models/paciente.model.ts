@@ -53,6 +53,18 @@ export const pacienteModel = {
     };
   },
 
+  getPacienteById(id: number) {
+    return prisma.paciente.findUnique({
+      where: { id },
+      include: {
+        citas: {
+          include: { medico: { include: { especialidad: true } } },
+          orderBy: { fecha: "desc" },
+        },
+      },
+    });
+  },
+
   create: async (
     nombre: string,
     ap_paterno: string,
@@ -68,7 +80,9 @@ export const pacienteModel = {
         ...(ap_materno !== undefined && { ap_materno }),
         ...(email !== undefined && { email }),
         ...(telefono !== undefined && { telefono }),
-        ...(fecha_nacimiento !== undefined && { fecha_nacimiento }),
+        ...(fecha_nacimiento !== undefined && {
+          fecha_nacimiento: new Date(fecha_nacimiento),
+        }),
       },
     });
   },

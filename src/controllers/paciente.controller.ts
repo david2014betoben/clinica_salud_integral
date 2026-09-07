@@ -18,6 +18,28 @@ export const getPacientes = async (
   }
 };
 
+export const getPacienteById = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ message: "El ID debe ser un número válido" });
+      return;
+    }
+    const paciente = await pacienteModel.getPacienteById(id);
+    if (!paciente) {
+      res.status(404).json({ message: "Paciente no encontrado" });
+      return;
+    }
+    res.status(200).json({ data: paciente });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error del servidor" });
+  }
+};
+
 export const postPaciente = async (
   req: Request,
   res: Response,
@@ -27,9 +49,9 @@ export const postPaciente = async (
       nombre,
       ap_paterno,
       ap_materno,
-      fecha_nacimiento,
-      telefono,
       email,
+      telefono,
+      fecha_nacimiento,
     } = req.body;
 
     if (!nombre || !ap_paterno || !fecha_nacimiento) {
@@ -42,10 +64,10 @@ export const postPaciente = async (
     const newPaciente = await pacienteModel.create(
       nombre,
       ap_paterno,
-      fecha_nacimiento,
       ap_materno,
-      telefono,
       email,
+      telefono,
+      fecha_nacimiento,
     );
 
     res.status(201).json({
@@ -76,18 +98,18 @@ export const putPaciente = async (
       nombre,
       ap_paterno,
       ap_materno,
-      fecha_nacimiento,
-      telefono,
       email,
+      telefono,
+      fecha_nacimiento,
     } = req.body;
 
     const updatePaciente = await pacienteModel.update(id, {
       nombre,
       ap_paterno,
       ap_materno,
-      fecha_nacimiento,
-      telefono,
       email,
+      telefono,
+      fecha_nacimiento,
     });
 
     res.status(200).json({
