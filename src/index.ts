@@ -9,11 +9,18 @@ import path from "node:path";
 import swaggerUi from "swagger-ui-express";
 import fs from "node:fs";
 import type { Request, Response } from "express";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  }),
+);
 
 app.use(express.json());
 

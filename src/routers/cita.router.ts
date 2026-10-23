@@ -20,7 +20,7 @@ import { validate } from "../middlewares/validate";
 
 const router: Router = Router();
 
-//router.get("/", getAllCitas);
+router.get("/", getAllCitas);
 //router.get("/:id", getCitaById);
 router.post(
   "/CREAR",

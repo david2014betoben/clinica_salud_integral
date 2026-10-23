@@ -1,8 +1,17 @@
 import prisma from "../config/prisma";
 
+interface FiltrosCitas {
+  estado?: string;
+  fecha?: Date;
+}
+
 export const citaModel = {
-  getAll: async () => {
+  getAll: async (filtros: FiltrosCitas = {}) => {
     return await prisma.cita.findMany({
+      where: {
+        ...(filtros.estado !== undefined ? { estado: filtros.estado } : {}),
+        ...(filtros.fecha !== undefined ? { fecha: filtros.fecha } : {}),
+      },
       include: {
         paciente: true,
         medico: {
@@ -12,14 +21,7 @@ export const citaModel = {
         },
         historial: true,
       },
-      orderBy: [
-        {
-          fecha: "asc",
-        },
-        {
-          hora: "asc",
-        },
-      ],
+      orderBy: [{ fecha: "asc" }, { hora: "asc" }],
     });
   },
 
@@ -122,17 +124,27 @@ export const citaModel = {
   `;
   },
 
-  getDailyCutoff(date: string) {
-    const startOfDay = new Date(`${date}T00:00:00`);
-    const endOfDay = new Date(`${date}T23:59:59`);
+  getDailyCutoff(date: Date) {
+    const startOfDay = new Date(date);
+    startOfDay.setUTCHours(0, 0, 0, 0);
+
+    const nextDay = new Date(startOfDay);
+    nextDay.setUTCDate(nextDay.getUTCDate() + 1);
 
     return prisma.cita.groupBy({
       by: ["estado"],
       where: {
-        fecha: { gte: startOfDay, lte: endOfDay },
-        estado: { in: ["COMPLETADA", "CANCELADA"] },
+        fecha: {
+          gte: startOfDay,
+          lt: nextDay,
+        },
+        estado: {
+          in: ["completada", "cancelada"],
+        },
       },
-      _count: { estado: true },
+      _count: {
+        estado: true,
+      },
     });
   },
 };

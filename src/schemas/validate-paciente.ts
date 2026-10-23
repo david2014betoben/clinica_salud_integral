@@ -1,24 +1,31 @@
 import { z } from "zod";
 
 export const pacienteSchema = z.object({
-  nombre: z.string().min(1, "El nombre es obligatorio").trim(),
-  ap_paterno: z.string().min(1, "El apellido es obligatorio").trim(),
-  ap_materno: z.string().min(1, "El apellido es obligatorio").trim().optional(),
+  nombre: z.string().trim().min(1, "El nombre es obligatorio"),
+
+  ap_paterno: z.string().trim().min(1, "El apellido paterno es obligatorio"),
+
+  ap_materno: z.string().trim().optional(),
+
   email: z
     .string()
-    .email("El correo no tiene un formato válido")
     .trim()
+    .email("El correo no tiene un formato válido")
     .optional(),
+
   fecha_nacimiento: z.coerce
     .date()
-    .max(new Date(), "La fecha de nacimiento no puede ser futura")
-    .optional(),
+    .refine(
+      (fecha) => fecha.getTime() <= Date.now(),
+      "La fecha de nacimiento no puede ser futura",
+    ),
+
   telefono: z
     .string()
+    .trim()
     .regex(
       /^\+?[0-9]{1,20}$/,
-      "El teléfono debe ser solo números enteros y opcional con el signo +",
+      "El teléfono debe contener números y puede empezar con +",
     )
-    .trim()
     .optional(),
 });
