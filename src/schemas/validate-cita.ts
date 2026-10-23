@@ -9,9 +9,23 @@ export const dailyCutoffSchema = z.object({
 });
 
 export const createCitaSchema = z.object({
-  fecha: z.coerce
-    .date()
-    .min(new Date(), "No puedes agendar una cita en una fecha que ya pasó"),
+  fecha: z.coerce.date().refine(
+    (fecha) => {
+      const hoyBolivia = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "America/La_Paz",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(new Date());
+
+      const fechaCita = fecha.toISOString().slice(0, 10);
+
+      return fechaCita >= hoyBolivia;
+    },
+    {
+      message: "No puedes agendar una cita en una fecha que ya pasó",
+    },
+  ),
 
   hora: z
     .string()

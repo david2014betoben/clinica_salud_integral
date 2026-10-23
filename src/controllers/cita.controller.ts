@@ -10,15 +10,53 @@ export const getAllCitas = async (
 ): Promise<void> => {
   /*
   #swagger.tags = ['Citas']
-
-  #swagger.summary = 'Obtener todas las citas'
-
-  #swagger.description = 'Obtiene la lista de todas las citas registradas en la clínica, incluyendo la información del paciente, médico, especialidad e historial clínico.'
-*/
+  #swagger.summary = 'Obtener citas con filtros opcionales'
+  */
   try {
-    const citas = await citaModel.getAll();
+    const { estado, fecha } = req.query;
 
-    res.status(200).json(citas);
+    if (
+      estado !== undefined &&
+      (typeof estado !== "string" || estado.trim() === "")
+    ) {
+      res.status(400).json({
+        message: "El estado debe ser un texto no vacío",
+      });
+      return;
+    }
+
+    let fechaFiltro: Date | undefined;
+
+    if (fecha !== undefined) {
+      if (typeof fecha !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+        res.status(400).json({
+          message: "La fecha debe tener el formato YYYY-MM-DD",
+        });
+        return;
+      }
+
+      fechaFiltro = new Date(`${fecha}T00:00:00.000Z`);
+
+      if (
+        Number.isNaN(fechaFiltro.getTime()) ||
+        fechaFiltro.toISOString().slice(0, 10) !== fecha
+      ) {
+        res.status(400).json({
+          message: "La fecha indicada no es válida",
+        });
+        return;
+      }
+    }
+
+    const citas = await citaModel.getAll({
+      ...(typeof estado === "string" ? { estado: estado.trim() } : {}),
+      ...(fechaFiltro !== undefined ? { fecha: fechaFiltro } : {}),
+    });
+
+    res.status(200).json({
+      data: citas,
+      total: citas.length,
+    });
   } catch (error) {
     console.error(error);
 

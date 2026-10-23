@@ -10,6 +10,8 @@ import { authorize } from "../middlewares/authorize.middleware";
 
 const router: Router = Router();
 
+router.get("/", getMedicos);
+
 router.get(
   "/ESPECIALIDADES",
   verifyToken,
