@@ -45,7 +45,15 @@ export async function login(req: Request, res: Response) {
       { expiresIn: "8h" },
     );
 
-    res.json({ token });
+    res.json({
+      token,
+      usuario: {
+        id: user.id,
+        nombre: user.email,
+        email: user.email,
+        rol: user.role,
+      },
+    });
   } catch {
     res.status(500).json({ message: "Error al iniciar sesión" });
   }
