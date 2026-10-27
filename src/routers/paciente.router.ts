@@ -13,15 +13,19 @@ import { authorize } from "../middlewares/authorize.middleware";
 
 const router: Router = Router();
 
-router.get("/", getPacientes);
+// Listado disponible para usuarios autenticados.
+router.get("/", verifyToken, getPacientes);
+
 router.get(
   "/:id",
   verifyToken,
   authorize("RECEPCIONISTA"),
-  getPacienteById /* #swagger.security = [{
-            "bearerAuth": []
-    }] */,
+  getPacienteById,
+  /* #swagger.security = [{
+    "bearerAuth": []
+  }] */
 );
+
 router.post(
   "/",
   verifyToken,
