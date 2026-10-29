@@ -5,7 +5,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "./generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -19,12 +19,14 @@ enum Role {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
+  id       Int     @id @default(autoincrement())
+  nombre   String?
+  email    String  @unique
   password String
-  role         Role
-  
-  // puedes agregar mas campos para adaptar a tu modelo, como nombre, apellido, etc.
+  role     Role
+  telefono String?
+  foto     String?
+
   @@map("users")
 }
 
