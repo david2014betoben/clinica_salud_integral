@@ -23,7 +23,7 @@ app.use(
 );
 
 app.use(express.json());
-
+app.use("/uploads", express.static(path.resolve("uploads")));
 //app.use("/api/especialidades", especialidadRouter);
 app.use("/api/medicos", medicoRouter);
 app.use("/api/pacientes", pacienteRouter);
