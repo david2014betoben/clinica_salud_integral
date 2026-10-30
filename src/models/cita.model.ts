@@ -147,4 +147,42 @@ export const citaModel = {
       },
     });
   },
+
+  getPaginadas: async (
+    pagina: number,
+    limite: number,
+    filtros: FiltrosCitas = {},
+  ) => {
+    const where = {
+      ...(filtros.estado !== undefined ? { estado: filtros.estado } : {}),
+      ...(filtros.fecha !== undefined ? { fecha: filtros.fecha } : {}),
+    };
+
+    const [data, total] = await prisma.$transaction([
+      prisma.cita.findMany({
+        where,
+        skip: (pagina - 1) * limite,
+        take: limite,
+        include: {
+          paciente: true,
+          medico: {
+            include: {
+              especialidad: true,
+            },
+          },
+          historial: true,
+        },
+        orderBy: [{ fecha: "asc" }, { hora: "asc" }, { id: "asc" }],
+      }),
+
+      prisma.cita.count({ where }),
+    ]);
+
+    return {
+      data,
+      total,
+      pagina,
+      totalPaginas: Math.max(1, Math.ceil(total / limite)),
+    };
+  },
 };
