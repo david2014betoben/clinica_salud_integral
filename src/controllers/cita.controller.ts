@@ -10,19 +10,34 @@ export const getAllCitas = async (
 ): Promise<void> => {
   /*
   #swagger.tags = ['Citas']
-  #swagger.summary = 'Obtener citas con filtros opcionales'
+  #swagger.summary = 'Obtener citas con filtros y paginación opcional'
   */
-  try {
-    const { estado, fecha } = req.query;
 
-    if (
-      estado !== undefined &&
-      (typeof estado !== "string" || estado.trim() === "")
-    ) {
-      res.status(400).json({
-        message: "El estado debe ser un texto no vacío",
-      });
-      return;
+  try {
+    const { estado, fecha, pagina, limite } = req.query;
+
+    let estadoFiltro: string | undefined;
+
+    if (estado !== undefined) {
+      if (typeof estado !== "string" || estado.trim() === "") {
+        res.status(400).json({
+          message: "El estado debe ser un texto no vacío",
+        });
+        return;
+      }
+
+      const normalizado = estado.trim().toLowerCase();
+
+      if (normalizado !== "todos") {
+        if (!["programada", "completada", "cancelada"].includes(normalizado)) {
+          res.status(400).json({
+            message: "El estado indicado no es válido",
+          });
+          return;
+        }
+
+        estadoFiltro = normalizado;
+      }
     }
 
     let fechaFiltro: Date | undefined;
@@ -48,16 +63,55 @@ export const getAllCitas = async (
       }
     }
 
-    const citas = await citaModel.getAll({
-      ...(typeof estado === "string" ? { estado: estado.trim() } : {}),
+    const filtros = {
+      ...(estadoFiltro !== undefined ? { estado: estadoFiltro } : {}),
       ...(fechaFiltro !== undefined ? { fecha: fechaFiltro } : {}),
-    });
+    };
+
+    if (pagina !== undefined || limite !== undefined) {
+      const numeroPagina = pagina === undefined ? 1 : Number(pagina);
+      const numeroLimite = limite === undefined ? 10 : Number(limite);
+
+      if (
+        (pagina !== undefined && typeof pagina !== "string") ||
+        !Number.isSafeInteger(numeroPagina) ||
+        numeroPagina < 1
+      ) {
+        res.status(400).json({
+          message: "La página debe ser un número entero mayor a cero",
+        });
+        return;
+      }
+
+      if (
+        (limite !== undefined && typeof limite !== "string") ||
+        !Number.isSafeInteger(numeroLimite) ||
+        numeroLimite < 1 ||
+        numeroLimite > 100
+      ) {
+        res.status(400).json({
+          message: "El límite debe ser un número entero entre 1 y 100",
+        });
+        return;
+      }
+
+      const resultado = await citaModel.getPaginadas(
+        numeroPagina,
+        numeroLimite,
+        filtros,
+      );
+
+      res.status(200).json(resultado);
+      return;
+    }
+
+    const citas = await citaModel.getAll(filtros);
 
     res.status(200).json({
       data: citas,
       total: citas.length,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(error);
 
     res.status(500).json({
